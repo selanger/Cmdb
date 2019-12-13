@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}
+    用户列表
+{% endblock %}
+
+{% block label %}
+    用户列表
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>用户名</th>
+            <th>邮箱</th>
+            <th>中文名</th>
+            <th>电话</th>
+            <th>QQ</th>
+            <th>激活状态</th>
+            <th>操作</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for one in object_list %}
+
+            <tr>
+                <td>{{ one.username }}</td>
+                <td>{{ one.email }}</td>
+                <td>{{ one.profile.name }}</td>
+                <td>{{ one.profile.phone }}</td>
+                <td>{{ one.profile.QQ }}</td>
+
+                {#                <td>{{ one.is_active }}</td>#}
+                {% if one.is_active %}
+                    <td>已激活</td>
+                {% else %}
+                    <td>未激活</td>
+                {% endif %}
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+
+    <ul style="float: right;margin-right: 50px;" class="pagination">
+        {% if page_obj.has_previous %}
+
+            <a class='page-link' href="{% url "user_list" %}?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        {% for page in paginator.page_range %}
+            <li class="paginate_button page-item">
+
+                <a class='page-link' href="{% url "user_list" %}?page={{ page }}">{{ page }}</a>
+
+            </li>
+        {% endfor %}
+          {% if page_obj.has_next %}
+            <a class='page-link' href="{% url "user_list" %}?page={{ page_obj.next_page_number }}">下一页</a>
+        {% endif %}
+
+
+
+    </ul>
+
+
+
+
+
+
+
+{% endblock %}
