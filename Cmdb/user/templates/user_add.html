@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}
+    增加用户
+{% endblock %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">增加用户</h6>
+        </div>
+        <div class="card-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="用户名" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="中文名字" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="password" placeholder="密码" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="email" placeholder="邮箱" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone" placeholder="电话" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="QQ" placeholder="QQ" class="form-control form-control-user">
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="增加用户" class="btn btn-primary btn-user btn-block">
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}

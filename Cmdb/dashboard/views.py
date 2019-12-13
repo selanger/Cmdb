@@ -11,7 +11,8 @@ from django.urls import reverse
 # Create your views here.
 
 
-
+### LoginRequiredMixin django提供的登陆验证类
+## 需要在settings中增加验证失败之后要跳转的登陆页面路由，即settings中的 LOGIN_URL 配置
 class Index(LoginRequiredMixin,View):
 
     def get(self,request):
