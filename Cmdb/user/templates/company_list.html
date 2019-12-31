@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}
+    单位列表
+{% endblock %}
+
+{% block style %}
+    <link href="/static/css/sweetalert/sweetalert.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block label %}
+    单位列表
+{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4 text-gray-800">
+        <a href="{% url "com_add" %}">增加单位</a>
+    </h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>单位名称</th>
+            <th>地址</th>
+            <th>操作</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for one in object_list %}
+
+            <tr>
+                <td>{{ one.company }}</td>
+                <td>{{ one.address }}</td>
+
+                <td>
+
+{#                    <a href="{% url "user_update" %}?id={{ one.id }}" class="btn btn-primary">删除</a>#}
+                    <button class="btn btn-primary" onclick="com_delete({{ one.id }})">删除</button>
+
+
+                </td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+
+    <ul style="float: right;margin-right: 50px;" class="pagination">
+        {% if page_obj.has_previous %}
+
+            <a class='page-link' href="{% url "com_list" %}?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        {#        {% for page in paginator.page_range %}#}
+        {% for page in page_range %}
+            <li class="paginate_button page-item">
+
+                <a class='page-link' href="{% url "com_list" %}?page={{ page }}">{{ page }}</a>
+
+            </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class='page-link' href="{% url "com_list" %}?page={{ page_obj.next_page_number }}">下一页</a>
+        {% endif %}
+
+
+    </ul>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="/static/js/sweetalert/sweetalert.min.js"></script>
+    <script>
+        function com_delete(com_id) {
+            $.ajax({
+                url: "{% url "com_del" %}",
+                type: "post",
+                data: {
+                    csrfmiddlewaretoken:"{{ csrf_token }}",
+                    com_id:com_id
+
+                },
+                success: function (data) {
+                    if (data.code == 10000) {
+                        swal({
+                            title: data.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.reload()
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                },
+                error: function (error) {
+                    swal({
+                        title: error,
+                        type: 'error',
+                        confirmButtonText: "知道了"
+                    });
+                }
+
+            })
+        }
+
+    </script>
+{% endblock %}

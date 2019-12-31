@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block style %}
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/js/sweetalert/sweetalert.min.js"></script>
+    <link href="/static/css/sweetalert/sweetalert.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">创建检测任务</h6>
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="all_box"> 全选
+                </th>
+                <th>IP</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for object in object_list %}
+                <tr>
+                    <th scope="row"><input type="checkbox" class="onecheck" name="{{ object.id }}"></th>
+                    <td>
+                        {{ object.ip }}
+                    </td>
+                </tr>
+
+            {% endfor %}
+            <tr>
+                <td colspan='2'>
+                    <input type="button" value="开始任务" class="btn btn-primary btn-user btn-block" id="createtask">
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </form>
+
+
+{% endblock %}
+
+{% block script %}
+
+
+    <script>
+
+        $(".onecheck").each(
+            function () {
+                $(this).click(
+                    function () {
+                        if (!this.checked) {
+                            // True
+                            $("#all_box").prop("checked", false)
+                        }
+                    }
+                )
+            }
+        )
+
+
+        $("#all_box").click(
+            function () {
+                // 点击全选，将所有的全部选中   checked
+                //console.log(this.checked);   //  判断当前的元素对象是否有checked 属性
+                //  如果为 True 有checked属性   被选中的状态
+                if (this.checked) {
+                    //   True
+                    // 被选中   设置 每一项 增加checked 属性
+                    // 通过类选择器 找到元素  增加checked 属性
+                    $(".onecheck").prop("checked", true);
+
+                } else {
+                    // 去掉所有元素的 checked 属性
+                    $(".onecheck").prop("checked", false);
+                }
+
+            }
+        )
+
+        $("#createtask").click(
+            function () {
+                {#console.log(111)#}
+                // 获取被选中的选项
+                var data = [];
+                $(".onecheck").each(
+                    function () {
+                        if (this.checked) {
+                            var c_id = this.name
+                            {#console.log(c_id)#}
+                            data.push(c_id)
+                        }
+                    }
+                )
+                {#console.log(data)#}
+                var send_data = {
+                    "data": data,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+
+                };
+
+                $.ajax({
+                    url: "{% url "create_task" %}",
+                    type: "post",
+                    data: send_data,
+                    success: function (res) {
+                        if (res.code == 10000) {
+                            console.log(res)
+                            swal({
+                                title: res.msg,
+                                type: 'success',
+                                confirmButtonText: "OK"
+                            }, function () {
+                                window.location.reload()
+                            });
+                        } else {
+                            swal({
+                                title: res.msg,
+                                type: 'error',
+                                confirmButtonText: "知道了"
+                            });
+                        }
+                    }
+
+
+                })
+
+            }
+        )
+
+
+    </script>
+
+
+
+
+{% endblock %}
+
+
+

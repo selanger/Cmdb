@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block style %}
+    <link href="/static/css/sweetalert/sweetalert.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+    {% load myfilter %}
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>任务列表</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">订单号</th>
+
+                        <th class="text-center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td class="text-center">{{ object.create_time | get_time }}</td>
+                            <td class="text-center">{{ object.order_no }}</td>
+
+                            <td class="text-center">
+                                <a href="#"
+                                   class="btn btn-primary btn-sm">查看详情</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <ul style="float: right;margin-right: 50px;" class="pagination">
+        {% if page_obj.has_previous %}
+            <a class='page-link' href="{% url "task_order_list" %}?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+        {% for page in page_range %}
+            <li class="paginate_button page-item">
+
+                <a class='page-link' href="{% url "task_order_list" %}?page={{ page }}">{{ page }}</a>
+
+            </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class='page-link' href="{% url "task_order_list" %}?page={{ page_obj.next_page_number }}">下一页</a>
+        {% endif %}
+
+    </ul>
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="/static/js/sweetalert/sweetalert.min.js"></script>
+{#    <script>#}
+{#        function idc_delete(id) {#}
+{#            var data = {};#}
+{#            data['id'] = id;#}
+{#            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";#}
+{#            $.ajax({#}
+{#                url: '{% url 'idc_delete' %}',#}
+{#                type: 'post',#}
+{#                data: data,#}
+{#                success: function (res) {#}
+{#                    if (res.code == 10000) {#}
+{#                        console.log(res)#}
+{#                        swal({#}
+{#                            title: res.msg,#}
+{#                            type: 'success',#}
+{#                            confirmButtonText: "OK"#}
+{#                        }, function () {#}
+{#                            window.location.reload()#}
+{#                        });#}
+{#                    } else {#}
+{#                        swal({#}
+{#                            title: res.msg,#}
+{#                            type: 'error',#}
+{#                            confirmButtonText: "知道了"#}
+{#                        });#}
+{#                    }#}
+{#                }#}
+{#            })#}
+{#        };#}
+{#    </script>#}
+{% endblock %}

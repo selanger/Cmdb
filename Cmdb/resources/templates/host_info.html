@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">资产详细信息</h6>
+    </div>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>IP</th>
+            <td>{{ host_object.ip }}</td>
+            <th>机房</th>
+            <td>{{ host_object.idc.name }}</td>
+            <th>机房全称</th>
+            <td>{{ host_object.idc.idc_name_all }}</td>
+        </tr>
+        <tr>
+            <th>主机状态</th>
+            <td>{{ host_object.get_status_display }}</td>
+            <th>主机探测状态</th>
+            <td>{{ host_object.get_scan_status_display }}</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>账号</th>
+            <td colspan="4">
+                {% for user in host_object.hostuser_set.all %}
+                    {{ user.username }}
+                {% endfor %}
+            </td>
+
+        </tr>
+
+
+    </table>
+
+
+
+{% endblock %}

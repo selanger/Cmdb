@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}
+    录入资产
+{% endblock %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">录入资产</h6>
+        </div>
+        <div class="card-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="ip" placeholder="Ip地址" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" name="company">
+                        <option>--选择单位--</option>
+                        {% for one in com_obj %}
+                            <option value="{{ one.id }}">{{ one.company }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="登陆账号" class="form-control form-control-user">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="登陆密码" class="form-control form-control-user">
+                </div>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" name="checked" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">选择主机探测(探测主机是否存活)</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="增加机房" class="btn btn-primary btn-user btn-block">
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}

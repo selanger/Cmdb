@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ DEBUG = True
 LOGIN_URL = "/dashboard/login/"
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -41,6 +39,8 @@ INSTALLED_APPS = [
     'dashboard',
     'resources',
     'user',
+    'djcelery',
+    'resources.templatetags'
 ]
 
 MIDDLEWARE = [
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'Cmdb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"templates")],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Cmdb.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 #
@@ -85,15 +84,14 @@ WSGI_APPLICATION = 'Cmdb.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # 数据库引擎
-        'NAME': 'cmdb',    #你的数据库名称 数据库需要自己提前建好
-        'USER': 'root',   #你的数据库用户名
-        'PASSWORD': '11111111', #你的数据库密码
-        'HOST': '127.0.0.1', #你的数据库主机，留空默认为localhost
-        'PORT': '3306', #你的数据库端口
+        'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
+        'NAME': 'cmdb',  # 你的数据库名称 数据库需要自己提前建好
+        'USER': 'root',  # 你的数据库用户名
+        'PASSWORD': '11111111',  # 你的数据库密码
+        'HOST': '127.0.0.1',  # 你的数据库主机，留空默认为localhost
+        'PORT': '3306',  # 你的数据库端口
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -113,20 +111,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -135,3 +131,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+import djcelery  # 导入django-celery模块
+
+djcelery.setup_loader()  # 进行模块载
+BROKER_URL = 'redis://127.0.0.1:6379/2'  # 任务容器地址，redis数据库地址
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/3'  ## 结果存储地址
+# CELERY_IMPORTS = ('CeleryTask.tasks')  # 具体的任务文件
+CELERY_TIMEZONE = 'Asia/Shanghai'  # celery时区
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'  # celey处理器，固定
+
+server_url = "http://127.0.0.1:8000"
